@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>DV simulator</title>
+    </head>
+
+
+<body>
+<!--two dark grey sections against a black background-->
+
+<!--First section: header and explanation-->
+    <div class="div1">
+        <h1>Distance Vector Algorithm</h1>
+        An explanation: blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        <br> <br>
+        To do:
+        <br>
+        - done: if 'directed' button clicked, double-sided arrow ↔ becomes right arrow →
+        <br>
+        - done: add 'clear input' and 'remove link' button - use JavaScript to clear
+        <br>
+        - done: turn div3 into sideways scrollable element
+        <br>
+        - done:remove trailing zeros in table
+        <br>
+        - done: css tables: space out and colour
+        <br>
+        - add node names along left of div3
+        <br>
+        - make form elements stay upon submission
+        <br>
+        - replace blah blah
+        <br>
+        - test edge cases or impossible cases (same link two different costs)
+        <br>
+        Optional:
+        <br>
+        - hover element with calculation (use latex?)
+        <br>
+        - allow user to choose from templates
+    </div>
+    <br>
+
+<!--Second section with interactive part-->
+    <div class="div2">
+        The interactive bit: blah blah blah blah blah blah blah blah blah blah blah
+        <br><br>
+        <form action="/">
+            <label for="directed">Directed graph: </label>
+            <input type="checkbox" class="directed" id="directed" name="directed" onclick="ChangeArrow()">
+        </form>
+        <br>
+        <form action="">
+            <button type='button' onclick='addLink()'>Add another link</button>
+            <button type='button' onclick='RemoveLink()'>Remove last link</button>
+            <button type='button' onclick='clearFields()'>Clear all fields</button>
+        </form>
+
+        <form id='calculate' method="post" action="/" >
+            <div id='section'>
+
+                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="x">
+                <span class="arrow">↔</span>
+                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="y">
+                <input type="text" name="dynamic_input"  class='link' placeholder="Cost" value="1">
+                <br>
+                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="y">
+                <span class="arrow">↔</span>
+                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="z">
+                <input type="text" name="dynamic_input"  class='link' placeholder="Cost" value="2">
+                <br>
+                <input type="text" name="dynamic_input" class='link' placeholder="Node" value="z">
+                <span class="arrow">↔</span>
+                <input type="text" name="dynamic_input" class='link' placeholder="Node" value="x">
+                <input type="text" name="dynamic_input" class='link' placeholder="Cost" value="7">
+                <br>
+            </div>
+
+            <br><br>
+            <button type="submit">Calculate distance vectors</button>
+        </form>
+    </div>
+    <br>
+
+    <div class="div3">
+        <div class="table-container">
+            <div class="column">
+                {%for node in table_headers%}
+                    {{node}}
+                <br>
+                {% endfor%}
+            </div>
+
+            <div class="column">
+                Initial
+                {%for table in initial%}
+                <table>
+                    <tr>
+                        <th></th>
+                        {% for header in table_headers%}
+                        <th>{{header}}</th>
+                        {% endfor%}
+                    </tr>
+
+                    {% for row,h in zip(table,table_headers)%}
+                    <tr>
+                        <th>{{h}}</th>
+
+                        {% for element in row%}
+                        <td>{{"%.10g"|format(element)}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                {%endfor%}
+            </div>
+
+
+            {% for iteration,x in zip(answer,range(len(answer))) %}
+                <div class="column">
+                {{ ['Send','Recalculate'][x%2] }}
+                {% for table in iteration %}
+
+
+                        <table>
+
+                            <tr>
+                                <th></th>
+                                {% for header in table_headers%}
+                                <th>{{header}}</th>
+                                {% endfor%}
+                            </tr>
+
+                            {% for row,h in zip(table,table_headers)%}
+                            <tr>
+                                <th>{{h}}</th>
+
+                                {% for element in row%}
+                                <td>{{"%.10g"|format(element)}}</td>
+                                {% endfor%}
+                            </tr>
+                            {% endfor %}
+
+                        </table>
+                        <br>
+
+                {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+        // upon checking/unchecking 'Directed graph' box, toggle all arrows
+        function ChangeArrow() {
+            let arrowList=document.getElementsByClassName('arrow')                 // list (HTML collection) of all arrows
+            let newArrow = (arrowList[0].textContent === '↔') ? '→' : '↔';        //ternary operator: if (the first) arrow is double-sided, switch to rightrrow and vice versa
+            for (let a of arrowList) {                                            // use 'of' instead of 'in' since arrowList is not a list but an HTML collection
+                a.textContent=newArrow                                            //assign the new arrow to each arrow using for loop
+            }
+        }
+
+        //upon clicking the button 'Add another link', add three forms (node,arrow,node,cost)
+        //assign all new Inputs to class 'link' for CSS
+        //assign all new Inputs to name 'dynamic_input' to add to list for dv.py
+        //and append all to 'section' - ie underneath the original links
+        //link break between each new link
+        function addLink() {
+            const newInput1=document.createElement('input')
+            newInput1.className='link'
+            newInput1.name='dynamic_input'
+            newInput1.placeholder='Node'
+            document.getElementById('section').appendChild(newInput1)
+
+            // by default, arrow is double-sided
+            // assign to class 'arrow' to allow for switching to rightarrow upon button click
+            const arrow=document.createElement('span')
+            arrow.textContent='↔'
+            arrow.className='arrow'
+            document.getElementById('section').appendChild(arrow)
+
+            const newInput2=document.createElement('input')
+            newInput2.className='link'
+            newInput2.name='dynamic_input'
+            newInput2.placeholder='Node'
+            document.getElementById('section').appendChild(newInput2)
+
+            const newInput3=document.createElement('input')
+            newInput3.className='link'
+            newInput3.name='dynamic_input'
+            newInput3.placeholder='Cost'
+            document.getElementById('section').appendChild(newInput3)
+
+            const lineBreak = document.createElement('br')
+            document.getElementById('section').appendChild(lineBreak)
+            }
+
+
+        function RemoveLink() {
+            let allLinks=document.getElementsByClassName('link')
+            for (let i=1;i<4;i++) {
+                allLinks[allLinks.length-1].remove()
+            }
+            let allArrows=document.getElementsByClassName('arrow')
+            allArrows[allArrows.length-1].remove()
+        }
+
+        // get elements by tag returns all <input> elements as an HTMl collection so first turn into array
+        // then loop through each element, setting its value to empty string
+        // using this shorthand function (input => input.value = '')
+        function clearFields() {
+            [...document.getElementsByTagName('input')].forEach(input => input.value = '');
+        }
+
+
+    </script>
+
+</body>
+
+</html>

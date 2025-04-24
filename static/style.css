@@ -1,0 +1,126 @@
+body{
+    background-color: #141826;
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
+    display: flex;                      /*enables Flexbox, a layout model*/
+    justify-content: center;            /*horizontally centres content (not items)*/
+    align-items: center;                /*vertically aligns items (not content) along a vertical line*/
+    flex-direction: column;             /*to stack the boxes*/
+    color:white                         /*all text*/
+}
+
+/*'Distance Vector Algorithm'<*/
+h1{
+    font-size: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+
+.div1{
+    margin-top:25px;
+    background-color: #1e253c;
+    width:100%;
+    max-width:800px;
+    padding: 25px;                   /*nothing can enter the 20px edge*/
+    border-radius: 15px;             /*curved edges*/
+    box-shadow: 0 0 15px 0 #352f2f;
+    text-align:left
+}
+
+
+.div2{
+    background-color: #1e253c;
+    width: 100%;
+    max-width: 800px;
+    padding: 25px;              /*nothing can enter the 25px edge*/
+    border-radius: 15px;        /*curved edges*/
+    box-shadow: 0 0 15px 0 #352f2f;
+
+}
+
+.div3 {
+    background-color: #1e253c;
+    width: 100%;
+    max-width: 800px;
+    padding: 35px;              /*nothing can enter the 35px edge*/
+    border-radius: 15px;        /*curved edges*/
+    box-shadow: 0 0 15px 0 #352f2f;
+    overflow-x: auto;           /*allows for side scrollable element*/
+    font-size: larger;           /*want 'send' 'recalculate' to be large*/
+}
+
+/*set of ALL tables*/
+.table-container {
+    display: grid;
+    grid-auto-flow: column;     /* create horizontal columns for iterations */
+    grid-auto-columns: auto;    /* adjust columns dynamically */
+    gap: 30px;                  /* horizontal space between columns */
+    justify-content: flex-start;
+    min-width: max-content;     /*allows for side scrollable element*/
+}
+
+
+/* one column of n tables */
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;                  /* vertical space between stacked tables */
+}
+
+/*each individual table*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: medium;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/*every grid element is a fixed height and width and is light grey by default*/
+th, td {
+    border: 1px solid #aaa;
+    padding: 6px 10px;
+    background-color: #5d5a5a;  /* default light grey */
+    text-align: center;
+    width: 20px;                /* uniform column width */
+    height: 25px;
+}
+
+/* first row of every table (header row) */
+table tr:first-child th {
+    background-color: #444; /* dark grey */
+}
+
+/* first column of every table */
+table tr th:first-child,  /* handles row header <th> */
+table tr td:first-child { /* handles row header <td>, just in case */
+    background-color: #444;
+}
+
+
+.link{
+    width:50px;
+    padding: 5px;
+    margin: 5px;
+    border-radius:5px;
+}
+
+button{
+    background-color: #444;
+    color: #eeeeee;
+    padding: 8px;
+    margin: 5px;
+    border-radius:5px;
+    cursor: pointer;
+    font-size: medium;
+}
+
+/*checkbox*/
+.directed{
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    background-color: #eee;
+    vertical-align: bottom;
+}
