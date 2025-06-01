@@ -3,6 +3,10 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <title>DV simulator</title>
+
+        <script
+                type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
     </head>
 
 
@@ -12,52 +16,113 @@
 <!--First section: header and explanation-->
     <div class="div1">
         <h1>Distance Vector Algorithm</h1>
-        An explanation: blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        <br>
+        The Distance Vector algorithm is used to calculate the least-cost path between nodes within a weighted graph.
+
+        Unlike <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra's algorithm</a>  which assumes that each node has a complete topology of the graph, this routing algorithm operates with a more limited view: nodes are only aware of link costs to adjacent neighbours and utilises iterative processes to learn and exchange information about the rest of the graph to recursively improve their understanding of the least-cost paths.
+        <br><br>
+        Of course, this decentralised approach means that convergence - the state where no further updates occur across any nodes - is much slower than algorithms that assume complete topology awareness.
+
+        <br><br><br>
+        <div class="inner-div">
+        Given a weighted graph with \(n\) nodes, the algorithm is as follows:
+        <ul>
+            <li>
+                Initially, each node \(x\) will only know their own \(n\)-dimensional distance vector, which is defined as follows:
+                $$D_x(y)=
+                    \begin{cases}
+                    0 & \text{if } x=y \\
+                    c(x,y) & \text{link cost if } (x,y) \text{ is an immediate neighbour} \\
+                    \infty & \text{otherwise}
+                    \end{cases}$$
+            </li>
+
+            <li>
+                Periodically, each node shares its distance vector with its immediate neighbours.
+            </li>
+            <li>
+                Apply the Bellman-Ford equation. Each destination \(x\) updates its own distance vector as:
+                $$D_x (y) = \min_{v\in N(x)} \{c(x,v) + D_v (y) \}$$ where \(N(x)\) is the set of immediate neighbours of \(x\)
+            </li>
+            <li>
+                Updates trigger DV to be shared to immediate neighbours. Repeat until convergence.
+            </li>
+        </ul>
+        </div>
+        <br><br>
+        When a node discovers a better route - a shorter path - to a destination, this algorithm immediately updates its own distance vector and notifies its neighbours. However, it is important to note that link failures or increases in link costs propagate more slowly through the network, as the algorithm inherently does not reflect these changes immediately. In other words: 'good news travels fast, bad news travels slow'
+        <br><br>
+        A consequence of the asynchronous nature of this algorithm is that link failures can also lead to a phenomenon called the
+        <a href="https://www.geeksforgeeks.org/route-poisoning-and-count-to-infinity-problem-in-routing/">count to infinity problem</a>: nodes may increment their cost to a destination indefinitely, unable to recognise that the destination is unreachable and this can cause large-scale instability across the network.
+
+
+
+
         <br> <br>
-        To do:
-        <br>
-        - done: if 'directed' button clicked, double-sided arrow ↔ becomes right arrow →
-        <br>
-        - done: add 'clear input' and 'remove link' button - use JavaScript to clear
-        <br>
-        - done: turn div3 into sideways scrollable element
-        <br>
-        - done:remove trailing zeros in table
-        <br>
-        - done: css tables: space out and colour
-        <br>
-        - add node names along left of div3
-        <br>
-        - make form elements stay upon submission
-        <br>
-        - replace blah blah
-        <br>
-        - test edge cases or impossible cases (same link two different costs)
-        <br>
-        Optional:
-        <br>
-        - hover element with calculation (use latex?)
-        <br>
-        - allow user to choose from templates
+<!--        To do:-->
+<!--        <br>-->
+<!--        - done: if 'directed' button clicked, double-sided arrow ↔ becomes right arrow →-->
+<!--        <br>-->
+<!--        - done: add 'clear input' and 'remove link' button - use JavaScript to clear-->
+<!--        <br>-->
+<!--        - done: turn div3 into sideways scrollable element-->
+<!--        <br>-->
+<!--        - done: remove trailing zeros in table-->
+<!--        <br>-->
+<!--        - done: css tables: space out and colour-->
+<!--        <br>-->
+<!--        - done: 'directed' functionality needs to be fixed-->
+<!--        <br>-->
+<!--        - done: put directed checkbox inside a button. make checkbox and arrows respond to button click-->
+<!--        <br>-->
+<!--        - done: add DV explanation: use MathJax-->
+<!--        <br>-->
+<!--        - make form elements stay upon submission-->
+<!--        <br>-->
+<!--        - upon submission, don't scroll back to top of page-->
+<!--        <br>-->
+<!--        - add instructions-->
+<!--        <br>-->
+<!--        - test edge cases or impossible cases (same link two different costs)-->
+<!--        <br>-->
+<!--        - remove this to do list!-->
+<!--        <br>-->
+<!--        Optional:-->
+<!--        <br>-->
+<!--        - add node names along left of div3-->
+<!--        <br>-->
+<!--        - hover element with calculation (use latex?)-->
+<!--        <br>-->
+<!--        - allow user to choose from templates-->
     </div>
     <br>
 
 <!--Second section with interactive part-->
     <div class="div2">
-        The interactive bit: blah blah blah blah blah blah blah blah blah blah blah
+        This simulator performs the distance vector algorithm on directed or undirected graphs.
+        It assumes that all distance vectors are sent to immediate neighbours at the same time, and thus updates are performed simultaneously.
         <br><br>
-        <form action="/">
-            <label for="directed">Directed graph: </label>
-            <input type="checkbox" class="directed" id="directed" name="directed" onclick="ChangeArrow()">
-        </form>
-        <br>
+        For an undirected graph, only one entry per link is necessary.
+        <br><br>
+        For a directed graph, an entry per 'direction' is required. Hence, if it is possible to traverse a link in both directions, two entries are required.
+        <br><br>
+
         <form action="">
             <button type='button' onclick='addLink()'>Add another link</button>
             <button type='button' onclick='RemoveLink()'>Remove last link</button>
             <button type='button' onclick='clearFields()'>Clear all fields</button>
         </form>
 
-        <form id='calculate' method="post" action="/" >
+        <form id='calculate' method="post" action="{{ url_for('tables') }}" >
+
+<!--            class is for css styling, name is for accessing in dv.py, id is for accessing onclick-->
+<!--            type=button is necessary otherwise clicking will take user to tables endpoint automatically-->
+            <button type="button" onclick="document.getElementById('directed').click()">
+                Directed graph:
+                <input type="checkbox" class="directed" name="directed" id="directed" onclick="ChangeArrow()">
+            </button>
+            <br>
+
             <div id='section'>
 
                 <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="x">
@@ -77,80 +142,13 @@
                 <br>
             </div>
 
-            <br><br>
+            <br>
             <button type="submit">Calculate distance vectors</button>
         </form>
     </div>
-    <br>
+<br>
 
-    <div class="div3">
-        <div class="table-container">
-            <div class="column">
-                {%for node in table_headers%}
-                    {{node}}
-                <br>
-                {% endfor%}
-            </div>
-
-            <div class="column">
-                Initial
-                {%for table in initial%}
-                <table>
-                    <tr>
-                        <th></th>
-                        {% for header in table_headers%}
-                        <th>{{header}}</th>
-                        {% endfor%}
-                    </tr>
-
-                    {% for row,h in zip(table,table_headers)%}
-                    <tr>
-                        <th>{{h}}</th>
-
-                        {% for element in row%}
-                        <td>{{"%.10g"|format(element)}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </table>
-                <br>
-                {%endfor%}
-            </div>
-
-
-            {% for iteration,x in zip(answer,range(len(answer))) %}
-                <div class="column">
-                {{ ['Send','Recalculate'][x%2] }}
-                {% for table in iteration %}
-
-
-                        <table>
-
-                            <tr>
-                                <th></th>
-                                {% for header in table_headers%}
-                                <th>{{header}}</th>
-                                {% endfor%}
-                            </tr>
-
-                            {% for row,h in zip(table,table_headers)%}
-                            <tr>
-                                <th>{{h}}</th>
-
-                                {% for element in row%}
-                                <td>{{"%.10g"|format(element)}}</td>
-                                {% endfor%}
-                            </tr>
-                            {% endfor %}
-
-                        </table>
-                        <br>
-
-                {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+{% block content %}{% endblock %}
 
 
 
@@ -170,7 +168,7 @@
         //assign all new Inputs to class 'link' for CSS
         //assign all new Inputs to name 'dynamic_input' to add to list for dv.py
         //and append all to 'section' - ie underneath the original links
-        //link break between each new link
+        //line break between each new link
         function addLink() {
             const newInput1=document.createElement('input')
             newInput1.className='link'

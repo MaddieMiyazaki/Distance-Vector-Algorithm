@@ -1,12 +1,12 @@
 body{
     background-color: #141826;
-    font-family: "Times New Roman", sans-serif;
-    font-size: large;
     display: flex;                      /*enables Flexbox, a layout model*/
     justify-content: center;            /*horizontally centres content (not items)*/
     align-items: center;                /*vertically aligns items (not content) along a vertical line*/
     flex-direction: column;             /*to stack the boxes*/
-    color:white                         /*all text*/
+    color:white;                         /*all text*/
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
 }
 
 /*'Distance Vector Algorithm'<*/
@@ -22,18 +22,33 @@ h1{
     background-color: #1e253c;
     width:100%;
     max-width:800px;
-    padding: 25px;                   /*nothing can enter the 20px edge*/
+    padding: 30px;                   /*nothing can enter the 30px edge*/
     border-radius: 15px;             /*curved edges*/
     box-shadow: 0 0 15px 0 #352f2f;
     text-align:left
 }
 
 
+.inner-div{
+    background-color: #444;
+    width:80%;
+    max-width:800px;
+    padding: 25px;                   /*nothing can enter the 20px edge*/
+    border-radius: 15px;             /*curved edges*/
+    box-shadow: 0 0 15px 0 #352f2f;
+    text-align:left;
+    margin: auto
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
 .div2{
     background-color: #1e253c;
     width: 100%;
     max-width: 800px;
-    padding: 25px;              /*nothing can enter the 25px edge*/
+    padding: 30px;              /*nothing can enter the 30px edge*/
     border-radius: 15px;        /*curved edges*/
     box-shadow: 0 0 15px 0 #352f2f;
 
@@ -53,9 +68,9 @@ h1{
 /*set of ALL tables*/
 .table-container {
     display: grid;
-    grid-auto-flow: column;     /* create horizontal columns for iterations */
-    grid-auto-columns: auto;    /* adjust columns dynamically */
-    gap: 30px;                  /* horizontal space between columns */
+    grid-auto-flow: column;     /*create horizontal columns for iterations */
+    grid-auto-columns: auto;    /*adjust columns dynamically */
+    gap: 30px;                  /*horizontal space between columns */
     justify-content: flex-start;
     min-width: max-content;     /*allows for side scrollable element*/
 }
@@ -119,8 +134,14 @@ button{
 /*checkbox*/
 .directed{
     cursor: pointer;
-    height: 18px;
-    width: 18px;
+    height: 15px;
+    width: 15px;
     background-color: #eee;
     vertical-align: bottom;
+}
+
+
+a{
+  color: #5d5a5a;
+  background-color: transparent;
 }

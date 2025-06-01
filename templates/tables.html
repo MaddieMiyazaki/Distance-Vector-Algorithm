@@ -1,0 +1,72 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class="div3">
+<div class="table-container">
+<!--    <div class="column">-->
+<!--        Node-->
+<!--        {%for node in table_headers%}-->
+<!--        <table>-->
+<!--            <tr><td>{{node}}</td></tr>-->
+<!--        </table>-->
+<!--        <br>-->
+<!--        {% endfor%}-->
+<!--    </div>-->
+
+    <div class="column">
+        Initial
+        {%for table in initial%}
+        <table>
+            <tr>
+                <th></th>
+                {% for header in table_headers%}
+                <th>{{header}}</th>
+                {% endfor%}
+            </tr>
+
+            {% for row,h in zip(table,table_headers)%}
+            <tr>
+                <th>{{h}}</th>
+
+                {% for element in row%}
+                <td>{{"%.10g"|format(element)}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {%endfor%}
+    </div>
+
+
+    {% for iteration,x in zip(answer,range(len(answer))) %}
+        <div class="column">
+        {{ ['Send','Recalculate'][x%2] }}
+
+        {% for table in iteration %}
+                <table>
+
+                    <tr>
+                        <th></th>
+                        {% for header in table_headers%}
+                        <th>{{header}}</th>
+                        {% endfor%}
+                    </tr>
+
+                    {% for row,h in zip(table,table_headers)%}
+                    <tr>
+                        <th>{{h}}</th>
+
+                        {% for element in row%}
+                        <td>{{"%.10g"|format(element)}}</td>
+                        {% endfor%}
+                    </tr>
+                    {% endfor %}
+
+                </table>
+        {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
