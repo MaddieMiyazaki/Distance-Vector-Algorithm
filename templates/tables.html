@@ -4,22 +4,13 @@
 
 <div class="div3">
 <div class="table-container">
-<!--    <div class="column">-->
-<!--        Node-->
-<!--        {%for node in table_headers%}-->
-<!--        <table>-->
-<!--            <tr><td>{{node}}</td></tr>-->
-<!--        </table>-->
-<!--        <br>-->
-<!--        {% endfor%}-->
-<!--    </div>-->
 
     <div class="column">
         Initial
         {%for table in initial%}
         <table>
             <tr>
-                <th></th>
+                <th class="node-name">node {{ table_headers[loop.index0] }}</th>
                 {% for header in table_headers%}
                 <th>{{header}}</th>
                 {% endfor%}
@@ -47,7 +38,7 @@
                 <table>
 
                     <tr>
-                        <th></th>
+                        <th class="node-name">node {{ table_headers[loop.index0] }}</th>
                         {% for header in table_headers%}
                         <th>{{header}}</th>
                         {% endfor%}

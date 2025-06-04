@@ -15,7 +15,7 @@
 
 <!--First section: header and explanation-->
     <div class="div1">
-        <h1>Distance Vector Algorithm</h1>
+        <h1>Distance Vector Algorithm Simulator</h1>
         <br>
         The Distance Vector algorithm is used to calculate the least-cost path between nodes within a weighted graph.
 
@@ -50,7 +50,7 @@
         </ul>
         </div>
         <br><br>
-        When a node discovers a better route - a shorter path - to a destination, this algorithm immediately updates its own distance vector and notifies its neighbours. However, it is important to note that link failures or increases in link costs propagate more slowly through the network, as the algorithm inherently does not reflect these changes immediately. In other words: 'good news travels fast, bad news travels slow'
+        When a node discovers a better route - a shorter path - to a destination, this algorithm immediately updates its own distance vector and notifies its neighbours. However, it is important to note that link failures or increases in link costs propagate more slowly through the network, as the algorithm inherently does not reflect these changes immediately. In other words: 'good news travels fast, bad news travels slow'.
         <br><br>
         A consequence of the asynchronous nature of this algorithm is that link failures can also lead to a phenomenon called the
         <a href="https://www.geeksforgeeks.org/route-poisoning-and-count-to-infinity-problem-in-routing/">count to infinity problem</a>: nodes may increment their cost to a destination indefinitely, unable to recognise that the destination is unreachable and this can cause large-scale instability across the network.
@@ -60,36 +60,24 @@
 
         <br> <br>
 <!--        To do:-->
-<!--        <br>-->
 <!--        - done: if 'directed' button clicked, double-sided arrow ↔ becomes right arrow →-->
-<!--        <br>-->
 <!--        - done: add 'clear input' and 'remove link' button - use JavaScript to clear-->
-<!--        <br>-->
 <!--        - done: turn div3 into sideways scrollable element-->
-<!--        <br>-->
 <!--        - done: remove trailing zeros in table-->
-<!--        <br>-->
 <!--        - done: css tables: space out and colour-->
-<!--        <br>-->
 <!--        - done: 'directed' functionality needs to be fixed-->
-<!--        <br>-->
 <!--        - done: put directed checkbox inside a button. make checkbox and arrows respond to button click-->
-<!--        <br>-->
 <!--        - done: add DV explanation: use MathJax-->
-<!--        <br>-->
 <!--        - make form elements stay upon submission-->
-<!--        <br>-->
-<!--        - upon submission, don't scroll back to top of page-->
-<!--        <br>-->
-<!--        - add instructions-->
-<!--        <br>-->
-<!--        - test edge cases or impossible cases (same link two different costs)-->
-<!--        <br>-->
-<!--        - remove this to do list!-->
-<!--        <br>-->
+<!--        - done: add instructions-->
+<!--        - done: test edge cases or impossible cases (same link two different costs)-->
+<!--        - done: figure out why yellow lines
+            - done: new arrows must match old ones-->
+
+
 <!--        Optional:-->
 <!--        <br>-->
-<!--        - add node names along left of div3-->
+<!--        - done: add node names along left of div3-->
 <!--        <br>-->
 <!--        - hover element with calculation (use latex?)-->
 <!--        <br>-->
@@ -113,7 +101,7 @@
             <button type='button' onclick='clearFields()'>Clear all fields</button>
         </form>
 
-        <form id='calculate' method="post" action="{{ url_for('tables') }}" >
+        <form id='calculate' method="post" action="{{ url_for('tables') }}"  onsubmit="return validateInput()">
 
 <!--            class is for css styling, name is for accessing in dv.py, id is for accessing onclick-->
 <!--            type=button is necessary otherwise clicking will take user to tables endpoint automatically-->
@@ -122,24 +110,32 @@
                 <input type="checkbox" class="directed" name="directed" id="directed" onclick="ChangeArrow()">
             </button>
             <br>
-
+            <br>
             <div id='section'>
 
-                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="x">
-                <span class="arrow">↔</span>
-                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="y">
-                <input type="text" name="dynamic_input"  class='link' placeholder="Cost" value="1">
-                <br>
-                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="y">
-                <span class="arrow">↔</span>
-                <input type="text" name="dynamic_input"  class='link' placeholder="Node" value="z">
-                <input type="text" name="dynamic_input"  class='link' placeholder="Cost" value="2">
-                <br>
-                <input type="text" name="dynamic_input" class='link' placeholder="Node" value="z">
-                <span class="arrow">↔</span>
-                <input type="text" name="dynamic_input" class='link' placeholder="Node" value="x">
-                <input type="text" name="dynamic_input" class='link' placeholder="Cost" value="7">
-                <br>
+                <div class="LinkGroup">
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="x">
+                    <span class="arrow">↔</span>
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="y">
+                    <input type="text" name="dynamic_input"  class='cost' placeholder="Cost" value="1">
+                    <br>
+                </div>
+
+                <div class="LinkGroup">
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="y">
+                    <span class="arrow">↔</span>
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="z">
+                    <input type="text" name="dynamic_input"  class='cost' placeholder="Cost" value="2">
+                    <br>
+                </div>
+
+                <div class="LinkGroup">
+                    <input type="text" name="dynamic_input" class='node' placeholder="Node" value="z">
+                    <span class="arrow">↔</span>
+                    <input type="text" name="dynamic_input" class='node' placeholder="Node" value="x">
+                    <input type="text" name="dynamic_input" class='cost' placeholder="Cost" value="7">
+                    <br>
+                </div>
             </div>
 
             <br>
@@ -164,49 +160,61 @@
             }
         }
 
-        //upon clicking the button 'Add another link', add three forms (node,arrow,node,cost)
-        //assign all new Inputs to class 'link' for CSS
+        //upon clicking the button 'Add another link', add (node,arrow,node,cost)
+        //assign all new Inputs to class 'node' or 'cost' for CSS
         //assign all new Inputs to name 'dynamic_input' to add to list for dv.py
         //and append all to 'section' - ie underneath the original links
-        //line break between each new link
-        function addLink() {
-            const newInput1=document.createElement('input')
-            newInput1.className='link'
-            newInput1.name='dynamic_input'
-            newInput1.placeholder='Node'
-            document.getElementById('section').appendChild(newInput1)
+        //arrow must correspond to directed/undirected
+        class NewLinkGroup {
+            constructor(isChecked) {
+                this.element = document.createElement('div')
+                this.element.className = 'LinkGroup'
 
-            // by default, arrow is double-sided
-            // assign to class 'arrow' to allow for switching to rightarrow upon button click
-            const arrow=document.createElement('span')
-            arrow.textContent='↔'
-            arrow.className='arrow'
-            document.getElementById('section').appendChild(arrow)
+                this.newInput1 = document.createElement('input')
+                this.newInput1.className = 'node'
+                this.newInput1.name = 'dynamic_input'
+                this.newInput1.placeholder = 'Node'
+                this.element.appendChild(this.newInput1)
 
-            const newInput2=document.createElement('input')
-            newInput2.className='link'
-            newInput2.name='dynamic_input'
-            newInput2.placeholder='Node'
-            document.getElementById('section').appendChild(newInput2)
+                this.arrow = document.createElement('span')
+                this.arrow.className = 'arrow'
+                if (isChecked) {
+                    this.arrow.textContent = '→'
+                }
+                else {
+                    this.arrow.textContent = '↔'
+                }
+                this.element.appendChild(this.arrow)
 
-            const newInput3=document.createElement('input')
-            newInput3.className='link'
-            newInput3.name='dynamic_input'
-            newInput3.placeholder='Cost'
-            document.getElementById('section').appendChild(newInput3)
+                this.newInput2 = document.createElement('input')
+                this.newInput2.className = 'node'
+                this.newInput2.name = 'dynamic_input'
+                this.newInput2.placeholder = 'Node'
+                this.element.appendChild(this.newInput2)
 
-            const lineBreak = document.createElement('br')
-            document.getElementById('section').appendChild(lineBreak)
+                this.newInput3 = document.createElement('input')
+                this.newInput3.className = 'cost'
+                this.newInput3.name = 'dynamic_input'
+                this.newInput3.placeholder = 'Cost'
+                this.element.appendChild(this.newInput3)
             }
+
+            render() {
+                return this.element
+            }
+        }
+
+        //using class above
+        function addLink()  {
+            let isChecked = document.getElementById("directed").checked
+            const n = new NewLinkGroup(isChecked)
+            document.getElementById('section').appendChild(n.render())
+        }
 
 
         function RemoveLink() {
-            let allLinks=document.getElementsByClassName('link')
-            for (let i=1;i<4;i++) {
-                allLinks[allLinks.length-1].remove()
-            }
-            let allArrows=document.getElementsByClassName('arrow')
-            allArrows[allArrows.length-1].remove()
+            let allLinks=document.getElementsByClassName('LinkGroup')
+            allLinks[allLinks.length-1].remove()
         }
 
         // get elements by tag returns all <input> elements as an HTMl collection so first turn into array
@@ -216,6 +224,53 @@
             [...document.getElementsByTagName('input')].forEach(input => input.value = '');
         }
 
+
+
+        // handle any empty fields, incorrect types, repeated links, trailing spaces
+        function validateInput() {
+
+            let allLinkGroup=document.getElementsByClassName('LinkGroup')
+            let nodePairs= []
+
+            for (let l of allLinkGroup) {
+                //check for empty or repeated links
+                let nodePair = l.getElementsByClassName('node')
+                let node1 = nodePair[0].value.trim()
+                let node2 = nodePair[1].value.trim()
+
+                if (node1 === '' || node2 === '') {
+                    alert('Fill out all node fields before submitting')
+                    return false;
+                }
+
+                let pair = [node1,node2].join(',')
+                if (nodePairs.includes(pair)) {
+                    alert('Repeated node pair')
+                    return false
+                }
+                nodePairs.push(pair)
+
+                // if undirected, then we also don't want swapped nodes
+                if (!document.getElementById("directed").checked) {
+                    nodePairs.push([node2,node1].join(','))
+                }
+
+
+                //check if cost is empty or not a number
+                //querySelector returns first (and here only) element
+                let cost = l.querySelector('.cost').value.trim();
+                if (cost === '') {
+                    alert('Cost field is empty');
+                    return false;
+                }
+                if (isNaN(cost)) {
+                    alert('Link cost must be a number');
+                    return false;
+                }
+            }
+
+            return true
+        }
 
     </script>
 

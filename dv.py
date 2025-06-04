@@ -15,7 +15,6 @@ def tables():
     if request.method == "POST":
         input_list = request.form.getlist("dynamic_input")
         directed=request.form.get('directed')
-        print(directed)
         input_tuples=list_to_tuple(input_list,directed)
         print(input_tuples)
 

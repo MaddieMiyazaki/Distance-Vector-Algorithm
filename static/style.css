@@ -98,8 +98,14 @@ th, td {
     padding: 6px 10px;
     background-color: #5d5a5a;  /* default light grey */
     text-align: center;
-    width: 20px;                /* uniform column width */
-    height: 25px;
+    width: 15px;                /* uniform column width */
+    height: 20px;
+}
+
+/*top left square for labelling the table*/
+.node-name {
+    font-size: xx-small ;
+    color: #d2cfcf;
 }
 
 /* first row of every table (header row) */
@@ -114,12 +120,30 @@ table tr td:first-child { /* handles row header <td>, just in case */
 }
 
 
-.link{
+/*each input box*/
+.node {
     width:50px;
     padding: 5px;
     margin: 5px;
     border-radius:5px;
 }
+
+.cost {
+    width:50px;
+    padding: 5px;
+    margin: 5px;
+    border-radius:5px;
+    background-color: #d2cfcf;
+}
+
+/*uniform spacing for each row of forms*/
+.LinkGroup {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 3px;
+  align-items: center;
+}
+
 
 button{
     background-color: #444;
@@ -140,8 +164,8 @@ button{
     vertical-align: bottom;
 }
 
-
+/*wiki links*/
 a{
-  color: #5d5a5a;
+  color: #d2cfcf;
   background-color: transparent;
 }
