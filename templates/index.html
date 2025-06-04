@@ -68,7 +68,7 @@
 <!--        - done: 'directed' functionality needs to be fixed-->
 <!--        - done: put directed checkbox inside a button. make checkbox and arrows respond to button click-->
 <!--        - done: add DV explanation: use MathJax-->
-<!--        - make form elements stay upon submission-->
+<!--        - done: make form elements stay upon submission-->
 <!--        - done: add instructions-->
 <!--        - done: test edge cases or impossible cases (same link two different costs)-->
 <!--        - done: figure out why yellow lines
@@ -103,39 +103,32 @@
 
         <form id='calculate' method="post" action="{{ url_for('tables') }}"  onsubmit="return validateInput()">
 
+            {% set default_links = [('x','y',1), ('y','z',2), ('z','x',7)] %}
+            {% set default_direction=False%}
+            {% set populate_links=populate_links if populate_links is defined else default_links %}
+            {% set directed=directed if directed is defined else default_direction%}
+
 <!--            class is for css styling, name is for accessing in dv.py, id is for accessing onclick-->
 <!--            type=button is necessary otherwise clicking will take user to tables endpoint automatically-->
             <button type="button" onclick="document.getElementById('directed').click()">
                 Directed graph:
-                <input type="checkbox" class="directed" name="directed" id="directed" onclick="ChangeArrow()">
+                <input type="checkbox" class="directed" name="directed" id="directed" onclick="ChangeArrow()" {% if directed %}checked{% endif %}>
             </button>
             <br>
             <br>
+
+
+
             <div id='section'>
-
+                {%for node1,node2,cost in populate_links%}
                 <div class="LinkGroup">
-                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="x">
-                    <span class="arrow">↔</span>
-                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="y">
-                    <input type="text" name="dynamic_input"  class='cost' placeholder="Cost" value="1">
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="{{node1}}">
+                    <span class="arrow">{{ '→' if directed else '↔' }}</span>
+                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="{{node2}}">
+                    <input type="text" name="dynamic_input"  class='cost' placeholder="Cost" value="{{cost}}">
                     <br>
                 </div>
-
-                <div class="LinkGroup">
-                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="y">
-                    <span class="arrow">↔</span>
-                    <input type="text" name="dynamic_input"  class='node' placeholder="Node" value="z">
-                    <input type="text" name="dynamic_input"  class='cost' placeholder="Cost" value="2">
-                    <br>
-                </div>
-
-                <div class="LinkGroup">
-                    <input type="text" name="dynamic_input" class='node' placeholder="Node" value="z">
-                    <span class="arrow">↔</span>
-                    <input type="text" name="dynamic_input" class='node' placeholder="Node" value="x">
-                    <input type="text" name="dynamic_input" class='cost' placeholder="Cost" value="7">
-                    <br>
-                </div>
+                {%endfor%}
             </div>
 
             <br>
