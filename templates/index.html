@@ -54,34 +54,8 @@
         <br><br>
         A consequence of the asynchronous nature of this algorithm is that link failures can also lead to a phenomenon called the
         <a href="https://www.geeksforgeeks.org/route-poisoning-and-count-to-infinity-problem-in-routing/">count to infinity problem</a>: nodes may increment their cost to a destination indefinitely, unable to recognise that the destination is unreachable and this can cause large-scale instability across the network.
-
-
-
-
         <br> <br>
-<!--        To do:-->
-<!--        - done: if 'directed' button clicked, double-sided arrow ↔ becomes right arrow →-->
-<!--        - done: add 'clear input' and 'remove link' button - use JavaScript to clear-->
-<!--        - done: turn div3 into sideways scrollable element-->
-<!--        - done: remove trailing zeros in table-->
-<!--        - done: css tables: space out and colour-->
-<!--        - done: 'directed' functionality needs to be fixed-->
-<!--        - done: put directed checkbox inside a button. make checkbox and arrows respond to button click-->
-<!--        - done: add DV explanation: use MathJax-->
-<!--        - done: make form elements stay upon submission-->
-<!--        - done: add instructions-->
-<!--        - done: test edge cases or impossible cases (same link two different costs)-->
-<!--        - done: figure out why yellow lines
-            - done: new arrows must match old ones-->
 
-
-<!--        Optional:-->
-<!--        <br>-->
-<!--        - done: add node names along left of div3-->
-<!--        <br>-->
-<!--        - hover element with calculation (use latex?)-->
-<!--        <br>-->
-<!--        - allow user to choose from templates-->
     </div>
     <br>
 
@@ -90,7 +64,7 @@
         This simulator performs the distance vector algorithm on directed or undirected graphs.
         It assumes that all distance vectors are sent to immediate neighbours at the same time, and thus updates are performed simultaneously.
         <br><br>
-        For an undirected graph, only one entry per link is necessary.
+        For an undirected graph, only one entry per link is required.
         <br><br>
         For a directed graph, an entry per 'direction' is required. Hence, if it is possible to traverse a link in both directions, two entries are required.
         <br><br>
@@ -163,33 +137,33 @@
                 this.element = document.createElement('div')
                 this.element.className = 'LinkGroup'
 
-                this.newInput1 = document.createElement('input')
-                this.newInput1.className = 'node'
-                this.newInput1.name = 'dynamic_input'
-                this.newInput1.placeholder = 'Node'
-                this.element.appendChild(this.newInput1)
+                const newInput1 = document.createElement('input')
+                newInput1.className = 'node'
+                newInput1.name = 'dynamic_input'
+                newInput1.placeholder = 'Node'
+                this.element.appendChild(newInput1)
 
-                this.arrow = document.createElement('span')
-                this.arrow.className = 'arrow'
+                const arrow = document.createElement('span')
+                arrow.className = 'arrow'
                 if (isChecked) {
-                    this.arrow.textContent = '→'
+                    arrow.textContent = '→'
                 }
                 else {
-                    this.arrow.textContent = '↔'
+                    arrow.textContent = '↔'
                 }
-                this.element.appendChild(this.arrow)
+                this.element.appendChild(arrow)
 
-                this.newInput2 = document.createElement('input')
-                this.newInput2.className = 'node'
-                this.newInput2.name = 'dynamic_input'
-                this.newInput2.placeholder = 'Node'
-                this.element.appendChild(this.newInput2)
+                const newInput2 = document.createElement('input')
+                newInput2.className = 'node'
+                newInput2.name = 'dynamic_input'
+                newInput2.placeholder = 'Node'
+                this.element.appendChild(newInput2)
 
-                this.newInput3 = document.createElement('input')
-                this.newInput3.className = 'cost'
-                this.newInput3.name = 'dynamic_input'
-                this.newInput3.placeholder = 'Cost'
-                this.element.appendChild(this.newInput3)
+                const newInput3 = document.createElement('input')
+                newInput3.className = 'cost'
+                newInput3.name = 'dynamic_input'
+                newInput3.placeholder = 'Cost'
+                this.element.appendChild(newInput3)
             }
 
             render() {
@@ -204,7 +178,7 @@
             document.getElementById('section').appendChild(n.render())
         }
 
-
+        // remove last link
         function RemoveLink() {
             let allLinks=document.getElementsByClassName('LinkGroup')
             allLinks[allLinks.length-1].remove()
@@ -236,9 +210,10 @@
                     return false;
                 }
 
+                // store each pair as string as .includes() cannot scan array element
                 let pair = [node1,node2].join(',')
                 if (nodePairs.includes(pair)) {
-                    alert('Repeated node pair')
+                    alert('Repeated node pair: [' + node1 + ',' +node2 + ']')
                     return false
                 }
                 nodePairs.push(pair)
