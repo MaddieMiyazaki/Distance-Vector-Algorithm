@@ -1,6 +1,13 @@
 import numpy as np
 import copy
 
+# not used in algorithm. used for repopulating input fields upon submission
+def repopulate(x:list):
+    return [(x[i], x[i + 1], x[i + 2]) for i in range(0, len(x), 3)]
+# ['x', 'y', '2', 'y', 'z', '6', 'z', 'w', '5', 'w', 'x', '7', 'w', 'y', '3']
+# becomes [('x', 'y', 2.0), ('y', 'z', 6.0), ('z', 'w', 5.0), ('w', 'x', 7.0), ('w', 'y', 3.0)]
+
+
 
 def list_to_tuple(x:list, directed):
     input_tuples = []
@@ -11,6 +18,8 @@ def list_to_tuple(x:list, directed):
             input_tuples+=[(x[i], x[i + 1], float(x[i + 2]))]
             input_tuples+=[(x[i+1], x[i], float(x[i + 2]))]
     return input_tuples
+# ['x', 'y', '2', 'y', 'z', '6', 'z', 'w', '5', 'w', 'x', '7', 'w', 'y', '3'], undirected
+# becomes [('x', 'y', 2.0), ('y', 'x', 2.0), ('y', 'z', 6.0), ('z', 'y', 6.0), ('z', 'w', 5.0), ('w', 'z', 5.0), ('w', 'x', 7.0), ('x', 'w', 7.0), ('w', 'y', 3.0), ('y', 'w', 3.0)]
 
 
 
