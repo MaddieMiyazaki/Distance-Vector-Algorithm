@@ -6,6 +6,11 @@ The Distance Vector algorithm is used to calculate the least-cost path between n
 This simulator assumes that all distance vectors are sent to immediate neighbours at the same time, and thus updates are performed simultaneously. Users can input any number of link costs and specify the nature of their graph (directed or undirected), and the application will return the full sequence of routing tables at each node until convergence. A more detailed description of the algorithm and a set of instructions can be found in the application itself.
 
 
+## How to run
+1. Install dependencies: `pip install -r requirements.txt`
+2. Start the app: `python dv.py` in the terminal
+3. Open `http://localhost:5000` in your browser
+
 ## Technologies used
 - **Framework**: Flask (Python backend)
 - **Frontend**: HTML, Javascript, CSS
