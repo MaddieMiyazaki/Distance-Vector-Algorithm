@@ -10,7 +10,7 @@ Try the simulator here: https://distance-vector-algorithm-simulator.onrender.com
 
 ## How to run locally 
 In the terminal:
-1. Clone repository: `git clone `
+1. Clone repository: `git clone https://github.com/MaddieMiyazaki/Distance-Vector-Algorithm.git`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Start the app: `python dv.py`
 
