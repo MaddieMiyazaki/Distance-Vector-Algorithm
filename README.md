@@ -1,5 +1,5 @@
 ## Distance Vector Algorithm Simulator
-This project is an interactive web-based simulator for the Distance Vector algorithm, implemented using the Flask framework. 
+This project is an interactive web-based simulator for the [Distance Vector algorithm](https://en.wikipedia.org/wiki/Distance-vector_routing_protocol/), implemented using the Flask framework. 
 
 The Distance Vector algorithm is used to calculate the least-cost path between nodes within a weighted graph. Nodes are only aware of link costs to adjacent neighbours and utilises iterative processes to learn and exchange information about the rest of the graph to recursively improve their understanding of the least-cost paths.
 
