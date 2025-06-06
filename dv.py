@@ -24,5 +24,6 @@ def tables():
         return render_template("tables.html",populate_links=populate_links,directed=directed,table_headers=node_list,initial=initial,answer=answer,zip=zip,len=len)
     return render_template('index.html')
 
+# for running locally
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
